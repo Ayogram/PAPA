@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import ImageInput from "./ImageInput";
 import VideoUrlInput from "./VideoUrlInput";
@@ -54,6 +54,30 @@ export default function AdminDashboard({
   const [loading, setLoading] = useState(false);
 
   const totalDeleted = safeDeletedPosts.length + safeDeletedVideos.length;
+
+  // 2-Minute Inactivity Auto-Logout
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    const performAutoLogout = async () => {
+      await logoutAction();
+    };
+
+    const resetTimer = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(performAutoLogout, 2 * 60 * 1000); // 2 minutes (120,000ms)
+    };
+
+    const events = ["mousemove", "keydown", "click", "touchstart", "scroll"];
+    events.forEach((evt) => window.addEventListener(evt, resetTimer, { passive: true }));
+
+    resetTimer();
+
+    return () => {
+      if (timer) clearTimeout(timer);
+      events.forEach((evt) => window.removeEventListener(evt, resetTimer));
+    };
+  }, []);
 
   // Auto-slug generator
   const handleTitleChange = (val: string) => {
