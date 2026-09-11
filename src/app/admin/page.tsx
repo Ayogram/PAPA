@@ -42,11 +42,11 @@ export default async function AdminPage() {
 
   return (
     <AdminDashboard
-      posts={posts}
-      videos={videos}
-      deletedPosts={deletedPosts}
-      deletedVideos={deletedVideos}
-      about={about}
+      posts={JSON.parse(JSON.stringify(posts))}
+      videos={JSON.parse(JSON.stringify(videos))}
+      deletedPosts={JSON.parse(JSON.stringify(deletedPosts))}
+      deletedVideos={JSON.parse(JSON.stringify(deletedVideos))}
+      about={JSON.parse(JSON.stringify(about))}
     />
   );
 }

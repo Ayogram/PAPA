@@ -36,7 +36,7 @@ export default async function PhotizoPage() {
         </div>
 
         {/* Video Grid with interactive modal */}
-        <VideoPlayerGrid videos={videos} />
+        <VideoPlayerGrid videos={JSON.parse(JSON.stringify(videos))} />
       </div>
     </div>
   );
