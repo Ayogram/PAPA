@@ -1,9 +1,16 @@
 import prisma from "@/lib/prisma";
 import AdminDashboard from "@/components/admin/AdminDashboard";
+import { isAuthenticated } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
+  const authed = await isAuthenticated();
+  if (!authed) {
+    redirect("/admin/login");
+  }
+
   let posts: any[] = [];
   let videos: any[] = [];
   let deletedPosts: any[] = [];
