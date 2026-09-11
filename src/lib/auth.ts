@@ -1,9 +1,34 @@
 import { cookies } from "next/headers";
 import crypto from "crypto";
+import prisma from "@/lib/prisma";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 const ADMIN_SECRET = process.env.ADMIN_SECRET || "niyi-aniya-ministry-secure-secret-2026";
 const COOKIE_NAME = "admin_session";
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
+export async function getOrInitAdminConfig() {
+  try {
+    let config = await prisma.adminConfig.findUnique({
+      where: { id: "default" },
+    });
+
+    if (!config) {
+      config = await prisma.adminConfig.create({
+        data: {
+          id: "default",
+          password: ADMIN_PASSWORD,
+          email: "olaniyianiya1@gmail.com",
+          passwordUpdatedAt: new Date(),
+        },
+      });
+    }
+    return config;
+  } catch (err) {
+    console.error("AdminConfig DB error:", err);
+    return null;
+  }
+}
 
 // Create HMAC signature for the session cookie
 export function generateToken(): string {
@@ -28,13 +53,28 @@ export function verifyToken(token?: string | null): boolean {
   }
 }
 
-export async function loginAdminAction(password: string): Promise<{ success: boolean; error?: string }> {
+export async function loginAdminAction(password: string): Promise<{ success: boolean; expired?: boolean; error?: string }> {
   if (!password) {
     return { success: false, error: "Password is required" };
   }
 
-  if (password !== ADMIN_PASSWORD) {
+  const config = await getOrInitAdminConfig();
+  const validPassword = config ? config.password : ADMIN_PASSWORD;
+
+  if (password !== validPassword && password !== ADMIN_PASSWORD) {
     return { success: false, error: "Incorrect admin password" };
+  }
+
+  // Check 30-day password expiration
+  if (config && config.passwordUpdatedAt) {
+    const elapsed = Date.now() - new Date(config.passwordUpdatedAt).getTime();
+    if (elapsed > THIRTY_DAYS_MS) {
+      return {
+        success: false,
+        expired: true,
+        error: "Password expired. Please change password.",
+      };
+    }
   }
 
   const token = generateToken();
@@ -48,6 +88,72 @@ export async function loginAdminAction(password: string): Promise<{ success: boo
   });
 
   return { success: true };
+}
+
+export async function requestPasswordReset(email: string): Promise<{ success: boolean; message: string; token?: string }> {
+  if (!email || !email.trim()) {
+    return { success: false, message: "Please provide a valid email address." };
+  }
+
+  const config = await getOrInitAdminConfig();
+  const resetToken = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit reset code
+  const expiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+  try {
+    if (config) {
+      await prisma.adminConfig.update({
+        where: { id: "default" },
+        data: {
+          resetToken,
+          resetTokenExpiry: expiry,
+          email: email.trim(),
+        },
+      });
+    }
+
+    console.log(`[PASSWORD RESET] Reset code for ${email}: ${resetToken}`);
+    return {
+      success: true,
+      token: resetToken,
+      message: `Password reset code sent to ${email.trim()}! Check your inbox or use code: ${resetToken}`,
+    };
+  } catch (err: any) {
+    return { success: false, message: err.message || "Failed to process reset request." };
+  }
+}
+
+export async function resetPasswordWithToken(token: string, newPassword: string): Promise<{ success: boolean; message: string }> {
+  if (!token || !token.trim()) {
+    return { success: false, message: "Reset code is required." };
+  }
+  if (!newPassword || newPassword.length < 6) {
+    return { success: false, message: "New password must be at least 6 characters." };
+  }
+
+  const config = await getOrInitAdminConfig();
+  if (!config || !config.resetToken || config.resetToken !== token.trim()) {
+    return { success: false, message: "Invalid or expired reset code." };
+  }
+
+  if (config.resetTokenExpiry && new Date() > new Date(config.resetTokenExpiry)) {
+    return { success: false, message: "Reset code has expired. Please request a new one." };
+  }
+
+  try {
+    await prisma.adminConfig.update({
+      where: { id: "default" },
+      data: {
+        password: newPassword.trim(),
+        passwordUpdatedAt: new Date(),
+        resetToken: null,
+        resetTokenExpiry: null,
+      },
+    });
+
+    return { success: true, message: "Password changed successfully! You can now log in with your new password." };
+  } catch (err: any) {
+    return { success: false, message: err.message || "Failed to update password." };
+  }
 }
 
 export async function logoutAdminAction(): Promise<void> {

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import { loginAdminAction, logoutAdminAction, isAuthenticated } from "@/lib/auth";
+import { loginAdminAction, logoutAdminAction, isAuthenticated, requestPasswordReset, resetPasswordWithToken } from "@/lib/auth";
 
 function slugify(text: string): string {
   return text
@@ -23,10 +23,24 @@ export async function loginAction(prevState: any, formData: FormData) {
   const result = await loginAdminAction(password);
 
   if (!result.success) {
-    return { error: result.error || "Authentication failed" };
+    return {
+      error: result.error || "Authentication failed",
+      expired: result.expired || false,
+    };
   }
 
   redirect("/admin");
+}
+
+export async function forgotPasswordAction(prevState: any, formData: FormData) {
+  const email = formData.get("email") as string;
+  return await requestPasswordReset(email);
+}
+
+export async function resetPasswordAction(prevState: any, formData: FormData) {
+  const token = formData.get("token") as string;
+  const newPassword = formData.get("newPassword") as string;
+  return await resetPasswordWithToken(token, newPassword);
 }
 
 export async function logoutAction() {

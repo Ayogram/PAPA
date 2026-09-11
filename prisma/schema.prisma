@@ -57,3 +57,13 @@ model About {
   bio   String  @db.Text
   image String?
 }
+
+model AdminConfig {
+  id                String    @id @default("default")
+  password          String    @default("admin123")
+  email             String    @default("olaniyianiya1@gmail.com")
+  passwordUpdatedAt DateTime  @default(now())
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  updatedAt         DateTime  @updatedAt
+}
