@@ -47,7 +47,7 @@ export default function Footer() {
             {/* Visit Ministry Link */}
             <div>
               <a
-                href="https://waterbrooks.org"
+                href="https://waterbrooks.com.ng"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#111827] hover:text-[#E85D2A] transition-colors"
