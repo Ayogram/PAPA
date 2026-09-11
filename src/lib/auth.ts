@@ -13,12 +13,19 @@ export function generateToken(): string {
 }
 
 export function verifyToken(token?: string | null): boolean {
-  if (!token) return false;
-  const parts = token.split(".");
-  if (parts.length !== 2) return false;
-  const [payload, hmac] = parts;
-  const expectedHmac = crypto.createHmac("sha256", ADMIN_SECRET).update(payload).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(expectedHmac));
+  try {
+    if (!token) return false;
+    const parts = token.split(".");
+    if (parts.length !== 2) return false;
+    const [payload, hmac] = parts;
+    const expectedHmac = crypto.createHmac("sha256", ADMIN_SECRET).update(payload).digest("hex");
+    const bufHmac = Buffer.from(hmac);
+    const bufExpected = Buffer.from(expectedHmac);
+    if (bufHmac.length !== bufExpected.length) return false;
+    return crypto.timingSafeEqual(bufHmac, bufExpected);
+  } catch {
+    return false;
+  }
 }
 
 export async function loginAdminAction(password: string): Promise<{ success: boolean; error?: string }> {
