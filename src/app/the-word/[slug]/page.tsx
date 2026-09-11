@@ -93,12 +93,12 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
 
         {/* Featured Cover Image */}
         {post.coverImage && (
-          <div className="w-full aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden bg-[#141414] mb-12 border border-[#222]">
+          <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden bg-[#141414] mb-12 border border-[#222]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={post.coverImage}
               alt={post.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-top"
             />
           </div>
         )}
