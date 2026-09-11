@@ -9,10 +9,15 @@ export const metadata = {
 };
 
 export default async function StorePage() {
-  const products = await prisma.product.findMany({
-    where: { published: true },
-    orderBy: { createdAt: "desc" },
-  });
+  let products: any[] = [];
+  try {
+    products = await prisma.product.findMany({
+      where: { published: true, deletedAt: null },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (err) {
+    console.error("Store page DB fetch error:", err);
+  }
 
   return (
     <div className="bg-[#0A0A0A] text-white min-h-screen pt-32 pb-28">

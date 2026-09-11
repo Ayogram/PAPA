@@ -12,9 +12,14 @@ interface PostDetailPageProps {
 
 export async function generateMetadata({ params }: PostDetailPageProps) {
   const { slug } = await params;
-  const post = await prisma.post.findFirst({
-    where: { slug, deletedAt: null },
-  });
+  let post: any = null;
+  try {
+    post = await prisma.post.findFirst({
+      where: { slug, deletedAt: null },
+    });
+  } catch (err) {
+    console.error("Post metadata DB fetch error:", err);
+  }
 
   if (!post) return { title: "Post Not Found | Niyi Aniya" };
 
@@ -31,9 +36,14 @@ export async function generateMetadata({ params }: PostDetailPageProps) {
 
 export default async function PostDetailPage({ params }: PostDetailPageProps) {
   const { slug } = await params;
-  const post = await prisma.post.findFirst({
-    where: { slug, deletedAt: null },
-  });
+  let post: any = null;
+  try {
+    post = await prisma.post.findFirst({
+      where: { slug, deletedAt: null },
+    });
+  } catch (err) {
+    console.error("Post detail DB fetch error:", err);
+  }
 
   if (!post) {
     notFound();
