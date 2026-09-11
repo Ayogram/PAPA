@@ -304,9 +304,18 @@ export default function AdminDashboard({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#E85D2A] hover:bg-[#cf4e1f] text-white font-bold py-3.5 rounded-xl uppercase tracking-wider text-xs transition-colors disabled:opacity-50"
+                  className="w-full bg-[#E85D2A] hover:bg-[#cf4e1f] text-white font-bold py-3.5 rounded-xl uppercase tracking-wider text-xs transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  {loading ? "Saving..." : editingPost ? "Update Post" : "Publish to The Word"}
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                      <span>Publishing Post...</span>
+                    </>
+                  ) : editingPost ? (
+                    "Update Post"
+                  ) : (
+                    "Publish to The Word"
+                  )}
                 </button>
               </form>
             </div>
@@ -496,9 +505,18 @@ export default function AdminDashboard({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#E85D2A] hover:bg-[#cf4e1f] text-white font-bold py-3.5 rounded-xl uppercase tracking-wider text-xs transition-colors disabled:opacity-50"
+                  className="w-full bg-[#E85D2A] hover:bg-[#cf4e1f] text-white font-bold py-3.5 rounded-xl uppercase tracking-wider text-xs transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  {loading ? "Saving..." : editingVideo ? "Update Video" : "Add Video"}
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                      <span>Saving Video...</span>
+                    </>
+                  ) : editingVideo ? (
+                    "Update Video"
+                  ) : (
+                    "Add Video"
+                  )}
                 </button>
               </form>
             </div>
@@ -637,9 +655,16 @@ export default function AdminDashboard({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-[#E85D2A] hover:bg-[#cf4e1f] text-white font-bold px-8 py-3.5 rounded-xl uppercase tracking-wider text-xs transition-colors disabled:opacity-50"
+                  className="bg-[#E85D2A] hover:bg-[#cf4e1f] text-white font-bold px-8 py-3.5 rounded-xl uppercase tracking-wider text-xs transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  {loading ? "Saving..." : "Save About Changes"}
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                      <span>Saving Changes...</span>
+                    </>
+                  ) : (
+                    "Save About Changes"
+                  )}
                 </button>
               </div>
             </form>
