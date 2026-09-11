@@ -9,10 +9,15 @@ export const metadata = {
 };
 
 export default async function PhotizoPage() {
-  const videos = await prisma.video.findMany({
-    where: { published: true, deletedAt: null },
-    orderBy: { createdAt: "desc" },
-  });
+  let videos: any[] = [];
+  try {
+    videos = await prisma.video.findMany({
+      where: { published: true, deletedAt: null },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (err) {
+    console.error("Photizo page DB fetch error:", err);
+  }
 
   return (
     <div className="bg-[#0A0A0A] text-white min-h-screen pt-32 pb-24">

@@ -6,11 +6,16 @@ import { formatDate } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const latestPosts = await prisma.post.findMany({
-    where: { published: true, deletedAt: null },
-    orderBy: { createdAt: "desc" },
-    take: 3,
-  });
+  let latestPosts: any[] = [];
+  try {
+    latestPosts = await prisma.post.findMany({
+      where: { published: true, deletedAt: null },
+      orderBy: { createdAt: "desc" },
+      take: 3,
+    });
+  } catch (err) {
+    console.error("Home page DB fetch error:", err);
+  }
 
   return (
     <div className="flex flex-col bg-white">

@@ -15,7 +15,12 @@ With a strong passion for discipleship, youth development, and practical Christi
 Marked by deep revelation, prophetic precision, and the manifestation of God's tangible presence, his ministry equips believers to be conduits of heaven's kingdom on earth, discover their purpose, and live out the God-life with integrity and excellence.`;
 
 export default async function AboutPage() {
-  const about = await prisma.about.findFirst();
+  let about: any = null;
+  try {
+    about = await prisma.about.findFirst();
+  } catch (err) {
+    console.error("About page DB fetch error:", err);
+  }
 
   const bioText = about?.bio || defaultBio;
   const profileImage = about?.image || "/2.jpeg";

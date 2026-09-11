@@ -10,10 +10,15 @@ export const metadata = {
 };
 
 export default async function TheWordPage() {
-  const posts = await prisma.post.findMany({
-    where: { published: true, deletedAt: null },
-    orderBy: { createdAt: "desc" },
-  });
+  let posts: any[] = [];
+  try {
+    posts = await prisma.post.findMany({
+      where: { published: true, deletedAt: null },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (err) {
+    console.error("The Word page DB fetch error:", err);
+  }
 
   return (
     <div className="bg-[#0A0A0A] text-white min-h-screen pt-32 pb-24">
