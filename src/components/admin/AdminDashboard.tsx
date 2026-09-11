@@ -31,12 +31,17 @@ interface AdminDashboardProps {
 }
 
 export default function AdminDashboard({
-  posts,
-  videos,
+  posts = [],
+  videos = [],
   deletedPosts = [],
   deletedVideos = [],
-  about,
+  about = null,
 }: AdminDashboardProps) {
+  const safePosts = Array.isArray(posts) ? posts : [];
+  const safeVideos = Array.isArray(videos) ? videos : [];
+  const safeDeletedPosts = Array.isArray(deletedPosts) ? deletedPosts : [];
+  const safeDeletedVideos = Array.isArray(deletedVideos) ? deletedVideos : [];
+
   const [activeTab, setActiveTab] = useState<"posts" | "videos" | "about" | "trash">("posts");
   const [editingPost, setEditingPost] = useState<any | null>(null);
   const [editingVideo, setEditingVideo] = useState<any | null>(null);
@@ -48,7 +53,7 @@ export default function AdminDashboard({
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const totalDeleted = deletedPosts.length + deletedVideos.length;
+  const totalDeleted = safeDeletedPosts.length + safeDeletedVideos.length;
 
   // Auto-slug generator
   const handleTitleChange = (val: string) => {
@@ -118,8 +123,8 @@ export default function AdminDashboard({
         {/* Tab Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex gap-2 sm:gap-6 overflow-x-auto border-t border-[#1C1C1C]">
           {[
-            { id: "posts", label: `The Word (${posts.length})` },
-            { id: "videos", label: `Photizo Videos (${videos.length})` },
+            { id: "posts", label: `The Word (${safePosts.length})` },
+            { id: "videos", label: `Photizo Videos (${safeVideos.length})` },
             { id: "about", label: "About Section" },
             { id: "trash", label: `Recycle Bin (${totalDeleted})` },
           ].map((tab) => (
@@ -309,15 +314,15 @@ export default function AdminDashboard({
             {/* List Column */}
             <div className="lg:col-span-7 space-y-4">
               <h3 className="text-base font-bold uppercase tracking-widest text-[#A1A1A1] mb-4">
-                Existing Posts ({posts.length})
+                Existing Posts ({safePosts.length})
               </h3>
 
-              {posts.length === 0 ? (
+              {safePosts.length === 0 ? (
                 <div className="p-8 text-center bg-[#141414] border border-[#262626] rounded-2xl text-[#777]">
                   No posts yet. Create your first post using the form.
                 </div>
               ) : (
-                posts.map((post) => (
+                safePosts.map((post) => (
                   <div
                     key={post.id}
                     className="bg-[#141414] border border-[#262626] hover:border-[#333] rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors"
@@ -500,15 +505,15 @@ export default function AdminDashboard({
 
             <div className="lg:col-span-7 space-y-4">
               <h3 className="text-base font-bold uppercase tracking-widest text-[#A1A1A1] mb-4">
-                Videos in Library ({videos.length})
+                Videos in Library ({safeVideos.length})
               </h3>
 
-              {videos.length === 0 ? (
+              {safeVideos.length === 0 ? (
                 <div className="p-8 text-center bg-[#141414] border border-[#262626] rounded-2xl text-[#777]">
                   No videos yet. Add your first video using the form.
                 </div>
               ) : (
-                videos.map((vid) => (
+                safeVideos.map((vid) => (
                   <div
                     key={vid.id}
                     className="bg-[#141414] border border-[#262626] hover:border-[#333] rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors"
@@ -682,7 +687,7 @@ export default function AdminDashboard({
             ) : (
               <div className="space-y-4">
                 {/* Deleted Posts */}
-                {deletedPosts.map((post) => (
+                {safeDeletedPosts.map((post) => (
                   <div
                     key={`post-${post.id}`}
                     className="bg-[#141414] border border-[#262626] hover:border-[#333] rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors"
@@ -700,7 +705,7 @@ export default function AdminDashboard({
                             The Word Post
                           </span>
                           <span className="text-[11px] text-[#666]">
-                            Deleted {new Date(post.deletedAt).toLocaleDateString()}
+                            Deleted {post.deletedAt ? new Date(post.deletedAt).toLocaleDateString() : ""}
                           </span>
                         </div>
                         <h4 className="font-bold text-white text-base truncate">{post.title}</h4>
@@ -734,7 +739,7 @@ export default function AdminDashboard({
                 ))}
 
                 {/* Deleted Videos */}
-                {deletedVideos.map((vid) => (
+                {safeDeletedVideos.map((vid) => (
                   <div
                     key={`video-${vid.id}`}
                     className="bg-[#141414] border border-[#262626] hover:border-[#333] rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-colors"
@@ -752,7 +757,7 @@ export default function AdminDashboard({
                             Photizo Video
                           </span>
                           <span className="text-[11px] text-[#666]">
-                            Deleted {new Date(vid.deletedAt).toLocaleDateString()}
+                            Deleted {vid.deletedAt ? new Date(vid.deletedAt).toLocaleDateString() : ""}
                           </span>
                         </div>
                         <h4 className="font-bold text-white text-base truncate">{vid.title}</h4>
