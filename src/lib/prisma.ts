@@ -2,11 +2,15 @@ import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-const dbUrl =
+let dbUrl =
   process.env.DATABASE_URL ||
   process.env.PRISMA_DATABASE_URL ||
   process.env.POSTGRES_PRISMA_URL ||
   "postgresql://postgres:admin123@localhost:5432/papas_web?schema=public";
+
+if (dbUrl.includes("-pooler") && !dbUrl.includes("pgbouncer=true")) {
+  dbUrl += dbUrl.includes("?") ? "&pgbouncer=true" : "?pgbouncer=true";
+}
 
 export const prisma =
   globalForPrisma.prisma ||

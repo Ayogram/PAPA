@@ -18,33 +18,45 @@ export default async function AdminPage() {
   let about: any = null;
 
   try {
-    const results = await Promise.all([
-      prisma.post.findMany({
-        where: { deletedAt: null },
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.video.findMany({
-        where: { deletedAt: null },
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.post.findMany({
-        where: { deletedAt: { not: null } },
-        orderBy: { deletedAt: "desc" },
-      }),
-      prisma.video.findMany({
-        where: { deletedAt: { not: null } },
-        orderBy: { deletedAt: "desc" },
-      }),
-      prisma.about.findFirst(),
-    ]);
-
-    posts = results[0];
-    videos = results[1];
-    deletedPosts = results[2];
-    deletedVideos = results[3];
-    about = results[4];
+    posts = await prisma.post.findMany({
+      where: { deletedAt: null },
+      orderBy: { createdAt: "desc" },
+    });
   } catch (err) {
-    console.error("Admin page DB fetch error:", err);
+    console.error("Admin fetch posts error:", err);
+  }
+
+  try {
+    videos = await prisma.video.findMany({
+      where: { deletedAt: null },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (err) {
+    console.error("Admin fetch videos error:", err);
+  }
+
+  try {
+    deletedPosts = await prisma.post.findMany({
+      where: { deletedAt: { not: null } },
+      orderBy: { deletedAt: "desc" },
+    });
+  } catch (err) {
+    console.error("Admin fetch deletedPosts error:", err);
+  }
+
+  try {
+    deletedVideos = await prisma.video.findMany({
+      where: { deletedAt: { not: null } },
+      orderBy: { deletedAt: "desc" },
+    });
+  } catch (err) {
+    console.error("Admin fetch deletedVideos error:", err);
+  }
+
+  try {
+    about = await prisma.about.findFirst();
+  } catch (err) {
+    console.error("Admin fetch about error:", err);
   }
 
   return (
