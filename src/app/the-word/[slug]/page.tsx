@@ -105,7 +105,7 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
 
         {/* Body Content */}
         <div className="prose prose-invert prose-lg max-w-none text-[#D4D4D4] leading-relaxed space-y-6 text-base sm:text-lg">
-          {paragraphs.map((para, i) => (
+          {paragraphs.map((para: string, i: number) => (
             <p key={i} className="leading-relaxed">
               {para.trim()}
             </p>

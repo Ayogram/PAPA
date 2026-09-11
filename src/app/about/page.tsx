@@ -62,7 +62,7 @@ export default async function AboutPage() {
             </div>
 
             <div className="text-[#D4D4D4] text-base sm:text-lg leading-relaxed space-y-6 font-medium">
-              {paragraphs.map((p, idx) => (
+              {paragraphs.map((p: string, idx: number) => (
                 <p key={idx}>{p.trim()}</p>
               ))}
             </div>
