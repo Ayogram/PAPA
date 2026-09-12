@@ -30,23 +30,32 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Ensure public/uploads exists
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadsDir, { recursive: true });
+    let publicUrl = "";
 
-    // Generate safe unique filename
-    const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const uniqueFilename = `${Date.now()}-${sanitizedName}`;
-    const filePath = path.join(uploadsDir, uniqueFilename);
+    try {
+      // Attempt local disk write (works in local development)
+      const uploadsDir = path.join(process.cwd(), "public", "uploads");
+      await mkdir(uploadsDir, { recursive: true });
 
-    await writeFile(filePath, buffer);
+      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+      const uniqueFilename = `${Date.now()}-${sanitizedName}`;
+      const filePath = path.join(uploadsDir, uniqueFilename);
+
+      await writeFile(filePath, buffer);
+      publicUrl = `/uploads/${uniqueFilename}`;
+    } catch (diskErr) {
+      // Vercel serverless read-only filesystem fallback -> Data URL encoding
+      console.warn("Disk write failed (Vercel serverless environment), falling back to Data URL:", diskErr);
+      const mimeType = file.type || "image/jpeg";
+      publicUrl = `data:${mimeType};base64,${buffer.toString("base64")}`;
+    }
 
     return NextResponse.json({
       success: true,
-      url: `/uploads/${uniqueFilename}`,
+      url: publicUrl,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Upload error:", error);
-    return NextResponse.json({ error: "Failed to upload image" }, { status: 500 });
+    return NextResponse.json({ error: error?.message || "Failed to upload image" }, { status: 500 });
   }
 }

@@ -133,7 +133,7 @@ export default function ImageInput({ name, label, defaultValue }: ImageInputProp
             <span className="font-bold text-white">
               {isUploading ? "Uploading..." : "Click to select file to upload"}
             </span>
-            <span>Saved directly to /public/uploads</span>
+            <span>Supports JPG, PNG, WEBP, GIF (Up to 5MB)</span>
           </label>
         </div>
       ) : (
