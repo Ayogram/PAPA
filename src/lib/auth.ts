@@ -5,7 +5,6 @@ import prisma from "@/lib/prisma";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 const ADMIN_SECRET = process.env.ADMIN_SECRET || "niyi-aniya-ministry-secure-secret-2026";
 const COOKIE_NAME = "admin_session";
-const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 export async function getOrInitAdminConfig() {
   try {
@@ -65,17 +64,6 @@ export async function loginAdminAction(password: string): Promise<{ success: boo
     return { success: false, error: "Incorrect admin password" };
   }
 
-  // Check 30-day password expiration
-  if (config && config.passwordUpdatedAt) {
-    const elapsed = Date.now() - new Date(config.passwordUpdatedAt).getTime();
-    if (elapsed > THIRTY_DAYS_MS) {
-      return {
-        success: false,
-        expired: true,
-        error: "Password expired. Please change password.",
-      };
-    }
-  }
 
   const token = generateToken();
   const cookieStore = await cookies();
