@@ -244,6 +244,7 @@ export async function saveVideoAction(prevState: any, formData: FormData) {
       });
     }
 
+    revalidatePath("/media");
     revalidatePath("/photizo");
     revalidatePath("/");
     revalidatePath("/admin");
@@ -263,6 +264,7 @@ export async function deleteVideoAction(id: string) {
       where: { id },
       data: { deletedAt: new Date() },
     });
+    revalidatePath("/media");
     revalidatePath("/photizo");
     revalidatePath("/");
     revalidatePath("/admin");
@@ -282,6 +284,7 @@ export async function restoreVideoAction(id: string) {
       where: { id },
       data: { deletedAt: null },
     });
+    revalidatePath("/media");
     revalidatePath("/photizo");
     revalidatePath("/");
     revalidatePath("/admin");
@@ -298,6 +301,7 @@ export async function permanentDeleteVideoAction(id: string) {
 
   try {
     await prisma.video.delete({ where: { id } });
+    revalidatePath("/media");
     revalidatePath("/photizo");
     revalidatePath("/");
     revalidatePath("/admin");
@@ -419,6 +423,7 @@ export async function emptyRecycleBinAction() {
     ]);
 
     revalidatePath("/the-word");
+    revalidatePath("/media");
     revalidatePath("/photizo");
     revalidatePath("/store");
     revalidatePath("/");

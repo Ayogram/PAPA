@@ -23,6 +23,16 @@ const nextConfig: NextConfig = {
         destination: "/",
         permanent: false,
       },
+      {
+        source: "/photizo",
+        destination: "/media",
+        permanent: true,
+      },
+      {
+        source: "/photizo/:path*",
+        destination: "/media/:path*",
+        permanent: true,
+      },
     ];
   },
 };

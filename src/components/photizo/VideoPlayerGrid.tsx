@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { formatDate } from "@/lib/utils";
 import MediaEmbed from "@/components/MediaEmbed";
 import { resolveMedia, playModeLabel, platformLabel } from "@/lib/media";
 
@@ -58,12 +57,6 @@ export default function VideoPlayerGrid({ videos }: { videos: VideoItem[] }) {
 
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <div
-                    suppressHydrationWarning
-                    className="text-[11px] font-bold uppercase tracking-widest text-[#A1A1A1] mb-2"
-                  >
-                    {formatDate(video.date)}
-                  </div>
                   <h3 className="text-lg font-bold tracking-tight text-white mb-3 group-hover:text-[#E85D2A] transition-colors leading-snug">
                     {video.title}
                   </h3>

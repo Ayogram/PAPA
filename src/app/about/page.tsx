@@ -75,7 +75,7 @@ export default async function AboutPage() {
                 Read His Teachings
               </Link>
               <Link
-                href="/photizo"
+                href="/media"
                 className="bg-transparent border border-white/40 hover:border-white text-white px-8 py-4 rounded-full font-bold uppercase tracking-wider text-xs transition-colors"
               >
                 Watch Broadcasts

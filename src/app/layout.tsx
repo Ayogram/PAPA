@@ -7,7 +7,7 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Niyi Aniya | Ministry",
-  description: "Official ministry website of Apostle Niyi Aniya — The Word, Photizo, Store, and Teachings.",
+  description: "Official ministry website of Apostle Niyi Aniya — The Word, Media, Store, and Teachings.",
   icons: {
     icon: "/icon.svg",
   },

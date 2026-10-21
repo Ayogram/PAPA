@@ -102,12 +102,12 @@ export default function Navbar() {
               The Word
             </Link>
             <Link
-              href="/photizo"
+              href="/media"
               className={`hover:text-[#E85D2A] transition-colors ${
-                pathname === "/photizo" ? "text-[#E85D2A]" : "text-white/90"
+                pathname === "/media" || pathname === "/photizo" ? "text-[#E85D2A]" : "text-white/90"
               }`}
             >
-              Photizo
+              Media
             </Link>
           </div>
 
@@ -181,13 +181,13 @@ export default function Navbar() {
               The Word
             </Link>
             <Link
-              href="/photizo"
+              href="/media"
               onClick={() => setMobileMenuOpen(false)}
               className={`block font-bold text-sm uppercase tracking-wider py-2.5 border-b border-[#1E1E1E] transition-colors ${
-                pathname === "/photizo" ? "text-[#E85D2A]" : "text-white/80 hover:text-white"
+                pathname === "/media" || pathname === "/photizo" ? "text-[#E85D2A]" : "text-white/80 hover:text-white"
               }`}
             >
-              Photizo
+              Media
             </Link>
             <div className="pt-4">
               <button

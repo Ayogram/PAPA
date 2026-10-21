@@ -40,10 +40,10 @@ export default async function Home() {
                 Read Today&apos;s Word
               </Link>
               <Link
-                href="/photizo"
+                href="/media"
                 className="bg-transparent border border-white/80 text-white px-7 py-3.5 sm:px-8 sm:py-4 rounded-full font-bold uppercase tracking-wider text-xs sm:text-sm hover:bg-white/10 transition-colors backdrop-blur-sm text-center"
               >
-                Watch Photizo
+                Watch Media
               </Link>
             </div>
           </div>
@@ -101,13 +101,13 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Photizo Section with 6.jpg Background */}
+      {/* Media Section with 6.jpg Background */}
       <section className="relative py-28 sm:py-40 bg-[#0A0A0A] text-white overflow-hidden">
         {/* Background Image */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/6.jpg"
-          alt="Experience Photizo"
+          alt="Experience Media"
           className="absolute inset-0 w-full h-full object-cover object-top opacity-85"
         />
         {/* Dark Overlay for readability */}
@@ -119,13 +119,13 @@ export default async function Home() {
             Watch &amp; Listen
           </p>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter mb-6">
-            Experience Photizo
+            Experience Media
           </h2>
           <p className="text-base sm:text-xl text-[#D4D4D4] max-w-2xl mx-auto mb-10 font-medium leading-relaxed">
             Watch the latest teachings and prophetic insights from Niyi Aniya.
           </p>
           <Link
-            href="/photizo"
+            href="/media"
             className="inline-block bg-[#E85D2A] text-white px-8 py-4 sm:px-10 sm:py-5 rounded-full font-bold uppercase tracking-wider hover:bg-[#cf4e1f] transition-colors text-xs sm:text-sm shadow-xl"
           >
             Start Watching

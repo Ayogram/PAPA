@@ -148,7 +148,7 @@ export default function AdminDashboard({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex gap-2 sm:gap-6 overflow-x-auto border-t border-[#1C1C1C]">
           {[
             { id: "posts", label: `The Word (${safePosts.length})` },
-            { id: "videos", label: `Photizo Videos (${safeVideos.length})` },
+            { id: "videos", label: `Media Videos (${safeVideos.length})` },
             { id: "about", label: "About Section" },
             { id: "trash", label: `Recycle Bin (${totalDeleted})` },
           ].map((tab) => (
@@ -430,7 +430,7 @@ export default function AdminDashboard({
             <div className="lg:col-span-5 bg-[#141414] border border-[#262626] rounded-2xl p-6 sm:p-8 self-start shadow-xl">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-extrabold tracking-tight">
-                  {editingVideo ? "Edit Video" : "Add Photizo Video"}
+                  {editingVideo ? "Edit Video" : "Add Media Video"}
                 </h2>
                 {editingVideo && (
                   <button
@@ -522,7 +522,7 @@ export default function AdminDashboard({
                     className="w-4 h-4 rounded border-[#333] text-[#E85D2A] focus:ring-[#E85D2A]"
                   />
                   <label htmlFor="video-published" className="text-xs font-bold uppercase tracking-wider text-white cursor-pointer select-none">
-                    Publish on Photizo Page
+                    Publish on Media Page
                   </label>
                 </div>
 
@@ -803,7 +803,7 @@ export default function AdminDashboard({
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-purple-950/50 text-purple-400 border border-purple-800/30">
-                            Photizo Video
+                            Media Video
                           </span>
                           <span className="text-[11px] text-[#666]">
                             Deleted {vid.deletedAt ? new Date(vid.deletedAt).toLocaleDateString() : ""}

@@ -82,8 +82,8 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/photizo" className="hover:text-[#0A0A0A] transition-colors">
-                    Photizo Broadcasts
+                  <Link href="/media" className="hover:text-[#0A0A0A] transition-colors">
+                    Media Broadcasts
                   </Link>
                 </li>
               </ul>
